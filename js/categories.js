@@ -1,44 +1,51 @@
-//Dynamic Categories Sections using JS
+//Dynamic Categories Sections & show the news using JS
  
+
+
 const loadCategories = () => {
     fetch('https://openapi.programming-hero.com/api/news/categories')
-    .then(response => response.json())
-    .then(data => displayCategories (data.data.news_category))
+        .then(response => response.json())
+        .then(data => displayCategories(data.data.news_category))
 }
 
 const displayCategories = categories => {
-for(const category of categories){
-    const categoriesContainer = document.getElementById('categories');
-    const categoryDiv = document.createElement('li');
-    categoryDiv.innerHTML = `
-    <a href="#" class="text-decoration-none text-dark">${category.category_name}</a>
+    for (const category of categories) {
+        const categoriesContainer = document.getElementById('categories');
+        const categoryDiv = document.createElement('li');
+        categoryDiv.innerHTML = `
+    <a onclick="loadNewsApi('${category.category_id}')" href="#" class="text-decoration-none text-dark">${category.category_name}</a>
     
     `;
-    categoriesContainer.classList.add('d-flex');
-    categoriesContainer.classList.add('list-unstyled');
-    categoryDiv.classList.add('p-4');
-    categoriesContainer.appendChild(categoryDiv);
-   
-    
-    
-}
-}
+        categoriesContainer.classList.add('d-flex');
+        categoriesContainer.classList.add('list-unstyled');
+        categoryDiv.classList.add('p-4');
+        categoriesContainer.appendChild(categoryDiv);
 
-//Dynamic News Sections//
 
-const loadAllNews = () => {
-    fetch('https://openapi.programming-hero.com/api/news/category/01')
-    .then(response => response.json())
-    .then(data => showAllNews(data.data))
+
+    }
 }
 
-const showAllNews = allNews => {
-    for(const news of allNews){
+loadCategories();
+
+const loadNewsApi = (category_id) => {
+    const url = `https://openapi.programming-hero.com/api/news/category/${category_id}`;
+    console.log(url)
+    fetch(url)
+        .then(response => response.json())
+        .then(data => displayNewsApi(data.data))
+}
+
+
+const displayNewsApi = allNews => {
+    // console.log(allNews)
+    const allNewsContainer = document.getElementById('all-news');
+    allNewsContainer.innerHTML = '';
+    for (const news of allNews) {
         console.log(news)
-        const allNewsContainer = document.getElementById('all-news');
-        const newsContainer = document.createElement('div');
-        newsContainer.innerHTML =`
-        <div class="card mb-3 p-3" >
+        const newsDiv = document.createElement('div');
+        newsDiv.innerHTML = `
+    <div class="card mb-3 p-3" >
         <div class="row g-0">
           <div class="col-md-4">
             <img src="${news.thumbnail_url}" class="img-fluid rounded-start" alt="...">
@@ -46,7 +53,7 @@ const showAllNews = allNews => {
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title mb-3">${news.title}</h5>
-              <p class="card-text mb-3">${news.details.slice(0,300)}</p>
+              <p class="card-text mb-3">${news.details.slice(0, 300)}</p>
               
             </div>
             <div class="last-line d-flex content-justify-center align-items-center ">
@@ -79,16 +86,13 @@ const showAllNews = allNews => {
        
         </div>
       </div>
-        
-        
-        
-        `;
-
-        allNewsContainer.appendChild(newsContainer);
+    
+    `;
+        allNewsContainer.appendChild(newsDiv);
     }
+
+
+
 }
 
-loadAllNews();
-
-
-loadCategories();
+loadNewsApi();
