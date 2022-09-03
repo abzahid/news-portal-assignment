@@ -1,7 +1,16 @@
-//Dynamic Categories Sections & show the news using JS
+// /Spin Loader 
  
+const spinLoader = isLoading => {
+  const loader = document.getElementById('loader');
+  if(isLoading == true){
+    loader.classList.remove('d-none');
+  }
+  else{
+    loader.classList.add('d-none');
+  }
+}
 
-
+//Dynamic Categories Sections & show the news using JS
 const loadCategories = () => {
     fetch('https://openapi.programming-hero.com/api/news/categories')
         .then(response => response.json())
@@ -13,7 +22,7 @@ const displayCategories = categories => {
         const categoriesContainer = document.getElementById('categories');
         const categoryDiv = document.createElement('li');
         categoryDiv.innerHTML = `
-    <a onclick="loadNewsApi('${category.category_id}')" href="#" class="text-decoration-none text-dark">${category.category_name}</a>
+    <a id="btnclicked"  onclick="loadNewsApi('${category.category_id}')" href="#" class="text-decoration-none text-dark btn-clicked">${category.category_name}</a>
     
     `;
         categoriesContainer.classList.add('d-flex');
@@ -32,19 +41,23 @@ loadCategories();
 
 const loadNewsApi = (category_id) => {
     const url = `https://openapi.programming-hero.com/api/news/category/${category_id}`;
-    console.log(url)
+    // console.log(url)
     fetch(url)
         .then(response => response.json())
         .then(data => displayNewsApi(data.data))
+        spinLoader(true);
+       
 }
 
 
 const displayNewsApi = allNews => {
     console.log(allNews)
+    spinLoader(true)
     const allNewsContainer = document.getElementById('all-news');
     allNewsContainer.innerHTML = '';
     const warning = document.getElementById('warning');
-
+   
+//Show warning for empty category
     if(allNews.length == 0){
       warning.classList.remove('d-none');
     }
@@ -52,9 +65,12 @@ const displayNewsApi = allNews => {
       warning.classList.add('d-none');
     
     }
+   
+    spinLoader(false) 
     for (const news of allNews) {
         // console.log(news)
-      
+       
+        
         const newsDiv = document.createElement('div');
         newsDiv.innerHTML = `
     <div class="card mb-3 p-3" >
@@ -101,6 +117,7 @@ const displayNewsApi = allNews => {
     
     `;
         allNewsContainer.appendChild(newsDiv);
+       
     }
 
 
@@ -108,5 +125,4 @@ const displayNewsApi = allNews => {
 }
 
 loadNewsApi();
-
 
