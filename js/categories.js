@@ -28,6 +28,8 @@ const displayCategories = categories => {
 
 loadCategories();
 
+// Dynamic Api Load and display data (news) 
+
 const loadNewsApi = (category_id) => {
     const url = `https://openapi.programming-hero.com/api/news/category/${category_id}`;
     console.log(url)
@@ -38,11 +40,21 @@ const loadNewsApi = (category_id) => {
 
 
 const displayNewsApi = allNews => {
-    // console.log(allNews)
+    console.log(allNews)
     const allNewsContainer = document.getElementById('all-news');
     allNewsContainer.innerHTML = '';
+    const warning = document.getElementById('warning');
+
+    if(allNews.length == 0){
+      warning.classList.remove('d-none');
+    }
+    else{
+      warning.classList.add('d-none');
+    
+    }
     for (const news of allNews) {
-        console.log(news)
+        // console.log(news)
+      
         const newsDiv = document.createElement('div');
         newsDiv.innerHTML = `
     <div class="card mb-3 p-3" >
@@ -96,3 +108,5 @@ const displayNewsApi = allNews => {
 }
 
 loadNewsApi();
+
+
