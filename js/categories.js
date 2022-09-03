@@ -1,3 +1,7 @@
+
+
+
+
 // /Spin Loader 
  
 const spinLoader = isLoading => {
@@ -63,7 +67,8 @@ const displayNewsApi = allNews => {
     }
     else{
       warning.classList.add('d-none');
-    
+      
+
     }
    
     spinLoader(false) 
@@ -125,4 +130,6 @@ const displayNewsApi = allNews => {
 }
 
 loadNewsApi();
+
+
 
