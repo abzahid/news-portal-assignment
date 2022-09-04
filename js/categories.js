@@ -112,8 +112,11 @@ const displayNewsApi = allNews => {
               <i class="fa-regular fa-star"></i>
              </div>
              <div class="button ms-5">
-              <a href="" class="btn-btn-primary text-decoration-none">See Details</a>
-             </div>
+              
+             <button onclick="loadModalData('${news._id}')"  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+             See Details
+       </button>
+            </div>
             </div>
           </div>
        
@@ -128,6 +131,31 @@ const displayNewsApi = allNews => {
 
 
 }
+
+// Modal 
+
+const loadModalData = (IdNews) => {
+  fetch(` https://openapi.programming-hero.com/api/news/${IdNews}`)
+      .then(res => res.json())
+      .then(data => displayModalData(data.data[0]))
+      .catch(error => {
+          console.log('Here is an Error', error)
+      })
+}
+const displayModalData = (data) => {
+
+  const modalTitle = document.getElementById('exampleModalLabel')
+  modalTitle.innerText = `${data.author.name ? data.author.name : 'No data Found'}`
+  const modalBody = document.getElementById('modal-body')
+  modalBody.innerHTML = `
+  <img class="img-fluid"  src="${data.image_url}"/>
+  <p>${data.author.published_date ? data.author.published_date : 'No Data Found'}</p>
+  <p>${data.details.length > 300 ? data.details.slice(0, 300) + '...' : data.details}</p>
+
+  `
+
+}
+
 
 loadNewsApi();
 
